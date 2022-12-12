@@ -49,7 +49,7 @@ async def button_handler(call: types.CallbackQuery, callback_data: dict, state: 
             await bot.send_message(call.from_user.id, 'Задание будет выглядеть следующим образом 👆\n\n'
                                                       f'Ограничение установленно на "<b>{db.get_task_data("class")}</b>" класс\n'
                                                       f'Цена за выполнение: "<b>{db.get_task_data("price")}</b>"\n'
-                                                      f'Выполнить до <b>{db.get_task_data("end_time")}</b>',
+                                                      f'Выполнить до <b>"{db.get_task_data("end_time")}"</b>',
                                    reply_markup=nav.createTask_menu(), parse_mode=types.ParseMode.HTML)
         case "task_price":
             await text_editor(text="Введите цена за выполнение задания:", call=call)
@@ -72,7 +72,7 @@ async def button_handler(call: types.CallbackQuery, callback_data: dict, state: 
                                     try:
                                         await bot.send_message(chat_id=user[0],
                                                                text=f"{text}\n\nЦена за выполнение: {price} монет\n"
-                                                                    f"Выполнить до {time}",
+                                                                    f"Выполнить до {time if time is not None else 'неограниченно'}",
                                                                reply_markup=nav.accept_task(db.get_last_task()))
                                         sent += 1
                                     except:
@@ -87,7 +87,7 @@ async def button_handler(call: types.CallbackQuery, callback_data: dict, state: 
                                 for user in db.get_all_users(db.get_task_data("class")):
                                     try:
                                         await bot.send_photo(chat_id=user[0], photo=file_id, caption=f"{text}\n\nЦена за выполнение: {price} монет\n"
-                                                                                                     f"Выполнить до {time}",
+                                                                                                     f"Выполнить до {time if time is not None else 'неограниченно'}",
                                                              reply_markup=nav.accept_task(db.get_last_task()))
                                         sent += 1
                                     except:
@@ -102,7 +102,7 @@ async def button_handler(call: types.CallbackQuery, callback_data: dict, state: 
                                 for user in db.get_all_users(db.get_task_data("class")):
                                     try:
                                         await bot.send_document(chat_id=user[0], document=file_id, caption=f"{text}\n\nЦена за выполнение: {price} монет\n"
-                                                                                                           f"Выполнить до {time}",
+                                                                                                           f"Выполнить до {time if time is not None else 'неограниченно'}",
                                                                 reply_markup=nav.accept_task(db.get_last_task()))
                                         sent += 1
                                     except:
@@ -117,7 +117,7 @@ async def button_handler(call: types.CallbackQuery, callback_data: dict, state: 
                                 for user in db.get_all_users(db.get_task_data("class")):
                                     try:
                                         await bot.send_video(chat_id=user[0], video=file_id, caption=f"{text}\n\nЦена за выполнение: {price} монет\n"
-                                                                                                     f"Выполнить до {time}",
+                                                                                                     f"Выполнить до {time if time is not None else 'неограниченно'}",
                                                              reply_markup=nav.accept_task(db.get_last_task()))
                                         sent += 1
                                     except:

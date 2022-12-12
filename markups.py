@@ -95,3 +95,10 @@ def limit_menu():
                  InlineKeyboardButton("⏱ Время", callback_data=cb.new(action="time_limit")),
                  InlineKeyboardButton("🔙 Назад", callback_data=f"back|create_task_menu"))
     return keyboard
+
+def complete_task_menu():
+    keyboard = InlineKeyboardMarkup(row_width=2)
+    keyboard.add(InlineKeyboardButton("📥 Добавить данные", callback_data=cb.new(action="add_data_task")),
+                 InlineKeyboardButton("🚀 Отправить на проверку", callback_data=cb.new(action="send_to_check")),
+                 InlineKeyboardButton("🔙 Назад", callback_data=f"back|main_menu"))
+    return keyboard

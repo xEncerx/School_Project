@@ -11,7 +11,10 @@ async def active_task(call: types.CallbackQuery):
                       markup=nav.active_task_menu(db.get_client_data(call.from_user.id)[6]))
 
 async def accept(call: types.CallbackQuery):
-    db_time = datetime.strptime(db.get_task_data("end_time", call.data[7:]), "%Y-%m-%d %H:%M:%S")
+    if db.get_task_data("end_time", call.data[7:]) is not None:
+        db_time = datetime.strptime(db.get_task_data("end_time", call.data[7:]), "%Y-%m-%d %H:%M:%S")
+    else:
+        db_time = datetime.strptime("2030-12-26 12:26:00", "%Y-%m-%d %H:%M:%S")
     if len(db.get_client_data(call.from_user.id)[6]) < 1 and datetime.now() <= db_time:
         action = call.data[7:]
         db.update_data(call.from_user.id, "active_task", action)
@@ -47,25 +50,25 @@ async def enter_task_menu(call: types.CallbackQuery):
                 await bot.send_message(chat_id=call.from_user.id,
                                        text=f"{text}\n\nЦена за выполнение: {price} монет\n"
                                             f"Выполнить до {time}",
-                                       reply_markup=nav.back_button("main_menu"))
+                                       reply_markup=nav.complete_task_menu())
         case "photo":
             if db.get_task_data("text") is not None:
                 await bot.send_photo(chat_id=call.from_user.id, photo=file_id,
                                      caption=f"{text}\n\nЦена за выполнение: {price} монет\n"
                                              f"Выполнить до {time}",
-                                     reply_markup=nav.back_button("main_menu"))
+                                     reply_markup=nav.complete_task_menu())
         case "document":
             if db.get_task_data("text") is not None:
                 await bot.send_document(chat_id=call.from_user.id, document=file_id,
                                         caption=f"{text}\n\nЦена за выполнение: {price} монет\n"
                                                 f"Выполнить до {time}",
-                                        reply_markup=nav.back_button("main_menu"))
+                                        reply_markup=nav.complete_task_menu())
         case "video":
             if db.get_task_data("text") is not None:
                 await bot.send_video(chat_id=call.from_user.id, video=file_id,
                                      caption=f"{text}\n\nЦена за выполнение: {price} монет\n"
                                              f"Выполнить до {time}",
-                                     reply_markup=nav.back_button("main_menu"))
+                                     reply_markup=nav.complete_task_menu())
     await call.answer()
 
 def register_handlers_active_task(dp: Dispatcher):
